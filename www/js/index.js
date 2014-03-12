@@ -16,6 +16,29 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
+/* Constants */
+var dir = {
+    e: 0,
+    se: 1,
+    s: 2,
+    sw: 3,
+    w: 4,
+    nw: 5,
+    n: 6,
+    ne: 7
+}
+
+var dColor = {
+    low: '#4DB848',
+    moderate: '#FFF200',
+    considerable: '#F7931D',
+    high: '#ED1C23',
+    extreme: '#000000'
+}
+/*************/
+
+
 var app = {
     // Application Constructor
     initialize: function() {
@@ -37,14 +60,45 @@ var app = {
     },
     // Update DOM on a Received Event
     receivedEvent: function(id) {
-        // var parentElement = document.getElementById(id);
-        // var listeningElement = parentElement.querySelector('.listening');
-        // var receivedElement = parentElement.querySelector('.received');
-
-        // listeningElement.setAttribute('style', 'display:none;');
-        // receivedElement.setAttribute('style', 'display:block;');
 
         console.log('Received Event: ' + id);
+        var sWidth = $(window).width();
+        var sHeight = $(window).height();
+        var containerDim = sWidth*0.9
+        var paper = Raphael(sWidth*0.05, sHeight*0.3, containerDim, containerDim + 100);
+        var offset = containerDim/2;
+        var yOffset = sHeight*0.1
+        var subAng = Math.PI / 4;
+        var radius = [70, 110, 140];
+        var vals = ['at', 'tl', 'bt'];
+        var pollFreq = { frequency: 100 };
+        var avyRose = [];
+
+        var slice = function (bt, at, tl) {
+            this.bt = bt
+            this.at = at
+            this.tl = tl
+        }
+
+        function getPt(ang, val){
+            var x = Math.cos(ang) * val + offset;
+            var y = Math.sin(ang) * val + offset + yOffset;
+            return {x:x, y:y};
+        }
+
+        var populateRose = function (num) {
+            for(var i = 0; i < num; i++){
+                if(i < 3){
+                    avyRose.push(new slice(false, false, false));
+                }else{
+                    avyRose.push(new slice(true, true, true));                    
+                }
+            }
+        }
+
+        function onError() {
+            $('#heading').html('no compass');
+        };
 
         function onSuccess(heading) {
             var headingDisplay = $('#heading');
@@ -53,81 +107,6 @@ var app = {
             headingDisplay.html('Heading: ' + heading);
             el.css('-webkit-transform', 'rotate(' + heading + 'deg)');
         };
-
-        function onError() {
-            $('#heading').html('no compass');
-        };
-
-        var options = { frequency: 100 };
-
-        /* if enabled rose won't load in xcode */
-        var watchID = navigator.compass.watchHeading(onSuccess, onError, options);
-
-        var slice = function (bt, at, tl) {
-            this.bt = bt
-            this.at = at
-            this.tl = tl
-        }
-
-        console.log(new slice(true, false, true));
-
-        var avyRose = [
-            {
-                bt: true,
-                at: true,
-                tl: true
-            },
-            {
-                bt: true,
-                at: false,
-                tl: false
-            },
-            {
-                bt: false,
-                at: true,
-                tl: false
-            },
-            {
-                bt: false,
-                at: false,
-                tl: true
-            },
-            {
-                bt: false,
-                at: false,
-                tl: false
-            },
-            {
-                bt: false,
-                at: false,
-                tl: false
-            },
-            {
-                bt: true,
-                at: false,
-                tl: false
-            },
-            {
-                bt: false,
-                at: false,
-                tl: false
-            }
-        ];
-
-        var sWidth = $(window).width();
-        var sHeight = $(window).height();
-        var canvas = $('#compassCanvas');
-        var containerDim = sWidth*0.9
-
-        var paper = Raphael(sWidth*0.05, sHeight*0.3, containerDim, containerDim + 100);
-
-        var offset = containerDim/2;
-        var yOffset = sHeight*0.1
-        var subAng = Math.PI / 4;
-        var radius = [70, 110, 140];
-        var vals = ['at', 'tl', 'bt'];
-
-        renderCircle();
 
         function renderCircle(){
             paper.clear();
@@ -138,7 +117,7 @@ var app = {
 
 
             var ind = 0;
-            for(var ang = Math.PI / 8; ang < (Math.PI / 8) + Math.PI * 2; ang += subAng){
+            for(var ang = Math.PI / 8; ang < ((Math.PI / 8) + Math.PI * 2) - subAng; ang += subAng){
                 for(var i = radius.length - 1; i >= 0; i--){
                     var cpt = getPt(ang, radius[i]);
                     var lpt = getPt(ang - subAng, radius[i]);
@@ -148,18 +127,19 @@ var app = {
                         'L' + lpt.x + ' ' + lpt.y +
                         'Z'
                     ).attr({
-                        fill: (avyRose[ind][vals[i]]) ? 'red' : '#fff'
+                        fill: (avyRose[ind][vals[i]]) ? dColor.moderate : '#fff',
+                        stroke: '#bdc3c7'
                     });
-                    console.log(avyRose[ind][vals[i]])
                 }
                 ind++;
             }
         }
 
-        function getPt(ang, val){
-            var x = Math.cos(ang) * val + offset;
-            var y = Math.sin(ang) * val + offset + yOffset;
-            return {x:x, y:y};
-        }
+
+        var watchID = navigator.compass.watchHeading(onSuccess, onError, pollFreq);
+
+        populateRose(8);
+        renderCircle();
+
     }
 };
