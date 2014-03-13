@@ -36,39 +36,28 @@ var dColor = {
     high: '#ED1C23',
     extreme: '#000000'
 }
+
+// var currForecast = [];
 /*************/
-var forecast = {};
-
 var app = {
-    // Application Constructor
-    initialize: function() {
-        this.bindEvents();
-    },
-    // Bind Event Listeners
-    //
-    // Bind any events that are required on startup. Common events are:
-    // 'load', 'deviceready', 'offline', and 'online'.
-    bindEvents: function() {
-        document.addEventListener('deviceready', this.onDeviceReady, false);
-    },
-    // deviceready Event Handler
-    //
-    // The scope of 'this' is the event. In order to call the 'receivedEvent'
-    // function, we must explicity call 'app.receivedEvent(...);'
-    onDeviceReady: function() {
-        app.receivedEvent('deviceready');
-    },
-    loadForecast: function () {
-        $.get('http://avy-rose-server.herokuapp.com/', {}, function (err, forecast) {
-            if(err) console.log(err);
-            console.log(forecast);
-        });
-    },
-    // Update DOM on a Received Event
-    receivedEvent: function(id) {
-        forecast = app.loadForecast();
+    compassInit: function () {
+        var pollFreq = { frequency: 100 };
+        
+        function onError() {
+            $('#heading').html('no compass');
+        };
 
-        console.log('Received Event: ' + id);
+        function onSuccess(heading) {
+            var headingDisplay = $('#heading');
+            var el = $('svg');
+
+            headingDisplay.html('Heading: ' + heading);
+            el.css('-webkit-transform', 'rotate(' + heading + 'deg)');
+        };
+
+        var watchID = navigator.compass.watchHeading(onSuccess, onError, pollFreq);        
+    },
+    drawCompass: function (forecast) {
         var sWidth = $(window).width();
         var sHeight = $(window).height();
         var containerDim = sWidth*0.9
@@ -87,66 +76,171 @@ var app = {
             this.tl = tl
         }
 
-        function getPt(ang, val){
+        var getPt = function (ang, val){
             var x = Math.cos(ang) * val + offset;
             var y = Math.sin(ang) * val + offset + yOffset;
             return {x:x, y:y};
         }
 
-        var populateRose = function (num) {
-            for(var i = 0; i < num; i++){
-                if(i < 3){
-                    avyRose.push(new slice(false, false, false));
-                }else{
-                    avyRose.push(new slice(true, true, true));                    
-                }
+        for(var i = 0; i < 8; i++){
+            if(i < 3){
+                avyRose.push(new slice(false, false, false));
+            }else{
+                avyRose.push(new slice(true, true, true));                    
             }
         }
 
-        function onError() {
-            $('#heading').html('no compass');
-        };
+        paper.clear();
 
-        function onSuccess(heading) {
-            var headingDisplay = $('#heading');
-            var el = $('svg');
-
-            headingDisplay.html('Heading: ' + heading);
-            el.css('-webkit-transform', 'rotate(' + heading + 'deg)');
-        };
-
-        function renderCircle(){
-            paper.clear();
-
-            paper.text(sWidth/2 - 15, 50, 'N').attr({
-                'font-size': 30
-            });
+        paper.text(sWidth/2 - 15, 50, 'N').attr({
+            'font-size': 30
+        });
 
 
-            var ind = 0;
-            for(var ang = Math.PI / 8; ang < ((Math.PI / 8) + Math.PI * 2) - subAng; ang += subAng){
-                for(var i = radius.length - 1; i >= 0; i--){
-                    var cpt = getPt(ang, radius[i]);
-                    var lpt = getPt(ang - subAng, radius[i]);
-                    var pth = paper.path(
-                        'M' + offset + ' ' + (offset + yOffset) +
-                        'L' + cpt.x + ' ' + cpt.y +
-                        'L' + lpt.x + ' ' + lpt.y +
-                        'Z'
-                    ).attr({
-                        fill: (avyRose[ind][vals[i]]) ? dColor.moderate : '#fff',
-                        stroke: '#bdc3c7'
-                    });
-                }
-                ind++;
+        var ind = 0;
+        for(var ang = Math.PI / 8; ang < ((Math.PI / 8) + Math.PI * 2) - subAng; ang += subAng){
+            for(var i = radius.length - 1; i >= 0; i--){
+                var cpt = getPt(ang, radius[i]);
+                var lpt = getPt(ang - subAng, radius[i]);
+                var pth = paper.path(
+                    'M' + offset + ' ' + (offset + yOffset) +
+                    'L' + cpt.x + ' ' + cpt.y +
+                    'L' + lpt.x + ' ' + lpt.y +
+                    'Z'
+                ).attr({
+                    fill: (avyRose[ind][vals[i]]) ? dColor.moderate : '#fff',
+                    stroke: '#bdc3c7'
+                });
             }
+            ind++;
+        }
+    },
+    // Application Constructor
+    initialize: function() {
+        this.bindEvents();
+    },
+    // Bind Event Listeners
+    //
+    // Bind any events that are required on startup. Common events are:
+    // 'load', 'deviceready', 'offline', and 'online'.
+    bindEvents: function() {
+        document.addEventListener('deviceready', this.onDeviceReady, false);
+    },
+    loadForecast: function (callback) {
+        $.get('http://avy-rose-server.herokuapp.com/', {}, function (forecast) {
+            callback(forecast);
+        });
+    },
+    // deviceready Event Handler
+    //
+    // The scope of 'this' is the event. In order to call the 'receivedEvent'
+    // function, we must explicity call 'app.receivedEvent(...);'
+    onDeviceReady: function() {
+        app.receivedEvent('deviceready');
+    },
+    // Update DOM on a Received Event
+    receivedEvent: function(id) {
+        if(id === 'deviceready'){
+            console.log('Received Event: ' + id);
+            app.loadForecast(app.drawCompass);
+            app.compassInit();
+        }else{
+            console.log('device not loaded');
         }
 
+        // var sWidth = $(window).width();
+        // var sHeight = $(window).height();
+        // var containerDim = sWidth*0.9
+        // var paper = Raphael(sWidth*0.05, sHeight*0.3, containerDim, containerDim + 100);
+        // var offset = containerDim/2;
+        // var yOffset = sHeight*0.1
+        // var subAng = Math.PI / 4;
+        // var radius = [70, 110, 140];
+        // var vals = ['at', 'tl', 'bt'];
+        // var pollFreq = { frequency: 100 };
+        // var avyRose = [];
 
-        var watchID = navigator.compass.watchHeading(onSuccess, onError, pollFreq);
+        // var slice = function (bt, at, tl) {
+        //     this.bt = bt
+        //     this.at = at
+        //     this.tl = tl
+        // }
 
-        populateRose(8);
-        renderCircle();
+        // function getPt(ang, val){
+        //     var x = Math.cos(ang) * val + offset;
+        //     var y = Math.sin(ang) * val + offset + yOffset;
+        //     return {x:x, y:y};
+        // }
+
+        // var loadForecast = function (callback) {
+        //     $.get('http://avy-rose-server.herokuapp.com/', {}, function (err, forecast) {
+        //         if(err) console.log(err);
+        //         currForecast = forecast.splice(0);
+        //         callback(currForecast);
+        //     });
+        // }
+
+        // var populateRose = function (forecast) {
+        //     var num = 8;
+
+        //     console.log('hi');
+
+        //     for(var i = 0; i < num; i++){
+        //         if(i < 3){
+        //             avyRose.push(new slice(false, false, false));
+        //         }else{
+        //             avyRose.push(new slice(true, true, true));                    
+        //         }
+        //     }
+        // }
+
+        // function onError() {
+        //     $('#heading').html('no compass');
+        // };
+
+        // function onSuccess(heading) {
+        //     var headingDisplay = $('#heading');
+        //     var el = $('svg');
+
+        //     headingDisplay.html('Heading: ' + heading);
+        //     el.css('-webkit-transform', 'rotate(' + heading + 'deg)');
+        // };
+
+        // function renderCircle(){
+        //     paper.clear();
+
+        //     paper.text(sWidth/2 - 15, 50, 'N').attr({
+        //         'font-size': 30
+        //     });
+
+
+        //     var ind = 0;
+        //     for(var ang = Math.PI / 8; ang < ((Math.PI / 8) + Math.PI * 2) - subAng; ang += subAng){
+        //         for(var i = radius.length - 1; i >= 0; i--){
+        //             var cpt = getPt(ang, radius[i]);
+        //             var lpt = getPt(ang - subAng, radius[i]);
+        //             var pth = paper.path(
+        //                 'M' + offset + ' ' + (offset + yOffset) +
+        //                 'L' + cpt.x + ' ' + cpt.y +
+        //                 'L' + lpt.x + ' ' + lpt.y +
+        //                 'Z'
+        //             ).attr({
+        //                 fill: (avyRose[ind][vals[i]]) ? dColor.moderate : '#fff',
+        //                 stroke: '#bdc3c7'
+        //             });
+        //         }
+        //         ind++;
+        //     }
+        // }
+
+
+        // var watchID = navigator.compass.watchHeading(onSuccess, onError, pollFreq);
+
+
+        //loadForecast(populateRose)
+        //populateRose(currForecast);
+        //renderCircle();
 
     }
+
 };
