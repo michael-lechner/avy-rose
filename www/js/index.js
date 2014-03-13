@@ -37,7 +37,7 @@ var dColor = {
     extreme: '#000000'
 }
 /*************/
-
+var forecast = {};
 
 var app = {
     // Application Constructor
@@ -58,8 +58,15 @@ var app = {
     onDeviceReady: function() {
         app.receivedEvent('deviceready');
     },
+    loadForecast: function () {
+        $.get('http://avy-rose-server.herokuapp.com/', {}, function (err, forecast) {
+            if(err) console.log(err);
+            console.log(forecast);
+        });
+    },
     // Update DOM on a Received Event
     receivedEvent: function(id) {
+        forecast = app.loadForecast();
 
         console.log('Received Event: ' + id);
         var sWidth = $(window).width();

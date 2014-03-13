@@ -1,0 +1,21 @@
+2014-03-13 14:07:17.910 avy-rose[38563:80b] Multi-tasking -> Device: YES, App: YES
+2014-03-13 14:07:17.950 avy-rose[38563:80b] Unlimited access to network resources
+2014-03-13 14:07:18.502 avy-rose[38563:80b] Resetting plugins due to page load.
+2014-03-13 14:07:18.797 avy-rose[38563:80b] Finished load of: file:///Users/cowboy-code/Library/Application%20Support/iPhone%20Simulator/7.0.3/Applications/A64670ED-D273-4875-BAA1-8CD00CBB48A4/avy-rose.app/www/index.html
+2014-03-13 14:07:19.116 avy-rose[38563:80b] Received Event: deviceready
+2014-03-13 14:07:19.253 avy-rose[38563:80b] [{"btRating":"low","tlRating":"moderate","atRating":"moderate","zone":"front range","forecastDate":"Thursday, March 13, 2014 at 5:41 AM","_id":"53220f123b2dbb0200f28afb","__v":0,"forecast":[{"n":{"bt":false,"tl":true,"at":true},"s":{"at":false,"tl":false,"bt":false},"w":{"bt":false,"tl":false,"at":false},"e":{"at":true,"tl":true,"bt":false},"nw":{"bt":false,"tl":false,"at":false},"se":{"at":true,"tl":true,"bt":false},"ne":{"bt":false,"tl":true,"at":true},"sw":{"at":false,"tl":false,"bt":false},"title":"DeepPersistentSlab"},{"n":{"bt":false,"tl":true,"at":true},"s":{"at":false,"tl":false,"bt":false},"w":{"bt":false,"tl":false,"at":false},"e":{"at":true,"tl":true,"bt":false},"nw":{"bt":false,"tl":false,"at":false},"se":{"at":true,"tl":true,"bt":false},"ne":{"bt":false,"tl":true,"at":true},"sw":{"at":false,"tl":false,"bt":false},"title":"WindSlab"}],"scrapeDate":"2014-03-13T20:03:30.404Z"}]
+2014-03-13 14:07:19.254 avy-rose[38563:80b] success
+2014-03-13 14:12:55.783 avy-rose[39845:80b] Multi-tasking -> Device: YES, App: YES
+2014-03-13 14:12:55.796 avy-rose[39845:80b] Unlimited access to network resources
+2014-03-13 14:12:56.057 avy-rose[39845:80b] Resetting plugins due to page load.
+2014-03-13 14:12:56.280 avy-rose[39845:80b] Finished load of: file:///Users/cowboy-code/Library/Application%20Support/iPhone%20Simulator/7.0.3/Applications/A64670ED-D273-4875-BAA1-8CD00CBB48A4/avy-rose.app/www/index.html
+2014-03-13 14:12:56.352 avy-rose[39845:80b] Received Event: deviceready
+2014-03-13 14:17:52.882 avy-rose[41062:80b] Multi-tasking -> Device: YES, App: YES
+2014-03-13 14:17:52.892 avy-rose[41062:80b] Unlimited access to network resources
+2014-03-13 14:17:53.329 avy-rose[41062:80b] Resetting plugins due to page load.
+2014-03-13 14:17:53.567 avy-rose[41062:80b] Finished load of: file:///Users/cowboy-code/Library/Application%20Support/iPhone%20Simulator/7.0.3/Applications/A64670ED-D273-4875-BAA1-8CD00CBB48A4/avy-rose.app/www/index.html
+2014-03-13 14:17:53.669 avy-rose[41062:80b] Received Event: deviceready
+2014-03-13 15:18:19.441 avy-rose[48484:80b] Multi-tasking -> Device: YES, App: YES
+2014-03-13 15:18:19.476 avy-rose[48484:80b] Unlimited access to network resources
+2014-03-13 15:18:19.945 avy-rose[48484:80b] Resetting plugins due to page load.
+2014-03-13 15:18:20.474 avy-rose[48484:80b] Finished load of: file:///Users/cowboy-code/Library/Application%20Support/iPhone%20Simulator/7.0.3/Applications/A64670ED-D273-4875-BAA1-8CD00CBB48A4/avy-rose.app/www/index.html
