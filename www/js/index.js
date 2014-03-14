@@ -68,9 +68,10 @@ var app = {
         var yOffset = sHeight*0.1
         var subAng = Math.PI / 4;
         var radius = [70, 110, 140];
-        var vals = ['at', 'tl', 'bt'];
         var pollFreq = { frequency: 100 };
         var avyRose = [];
+        var vals = ['at', 'tl', 'bt'];
+        var lvlColor = [dColor[forecast.atRating], dColor[forecast.tlRating], dColor[forecast.btRating]];
 
         var Slice = function (bt, at, tl) {
             this.bt = bt
@@ -84,14 +85,11 @@ var app = {
             return {x:x, y:y};
         }
 
-        // var a = []
         for(var key in forecast.forecast[0]){
             if(key !== 'title'){
                 avyRose[dir[key]] = new Slice(forecast.forecast[0][key].bt, forecast.forecast[0][key].at, forecast.forecast[0][key].tl)
             }
         }    
-
-        console.log(forecast)
 
         paper.clear();
 
@@ -111,7 +109,7 @@ var app = {
                     'L' + lpt.x + ' ' + lpt.y +
                     'Z'
                 ).attr({
-                    fill: (avyRose[ind][vals[i]]) ? dColor.moderate : '#fff',
+                    fill: (avyRose[ind][vals[i]]) ? lvlColor[i] : '#fff',
                     stroke: '#bdc3c7'
                 });
             }
