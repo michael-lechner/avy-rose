@@ -58,6 +58,8 @@ var app = {
         var watchID = navigator.compass.watchHeading(onSuccess, onError, pollFreq);        
     },
     drawCompass: function (forecast) {
+        forecast = forecast[0];
+
         var sWidth = $(window).width();
         var sHeight = $(window).height();
         var containerDim = sWidth*0.9
@@ -70,7 +72,7 @@ var app = {
         var pollFreq = { frequency: 100 };
         var avyRose = [];
 
-        var slice = function (bt, at, tl) {
+        var Slice = function (bt, at, tl) {
             this.bt = bt
             this.at = at
             this.tl = tl
@@ -82,13 +84,14 @@ var app = {
             return {x:x, y:y};
         }
 
-        for(var i = 0; i < 8; i++){
-            if(i < 3){
-                avyRose.push(new slice(false, false, false));
-            }else{
-                avyRose.push(new slice(true, true, true));                    
+        // var a = []
+        for(var key in forecast.forecast[0]){
+            if(key !== 'title'){
+                avyRose[dir[key]] = new Slice(forecast.forecast[0][key].bt, forecast.forecast[0][key].at, forecast.forecast[0][key].tl)
             }
-        }
+        }    
+
+        console.log(forecast)
 
         paper.clear();
 
