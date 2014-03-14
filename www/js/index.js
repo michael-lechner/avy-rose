@@ -37,21 +37,26 @@ var dColor = {
     extreme: '#000000'
 }
 
-// var currForecast = [];
+var testing = false;
+
 /*************/
 var app = {
     compassInit: function () {
         var pollFreq = { frequency: 100 };
         
         function onError() {
-            $('#heading').html('no compass');
+            if(testing){
+                $('#heading').html('no compass');
+            }
         };
 
         function onSuccess(heading) {
-            var headingDisplay = $('#heading');
-            var el = $('svg');
+            if(testing){
+                var headingDisplay = $('#heading');
+                headingDisplay.html('Heading: ' + heading);
+            }
 
-            headingDisplay.html('Heading: ' + heading);
+            var el = $('svg');
             el.css('-webkit-transform', 'rotate(' + heading + 'deg)');
         };
 
@@ -120,6 +125,20 @@ var app = {
     initialize: function() {
         this.bindEvents();
     },
+    jQueryInit: function(forecast) {
+        $('.zone').html(forecast[0].zone);
+
+        /* handlers */
+        $(document).on('tap', '.bt-1', function () {
+            $('.bt-1').addClass('bt-actv');
+            $('.bt-2').removeClass('bt-actv');
+        })
+
+        $(document).on('tap', '.bt-2', function () {
+            $('.bt-2').addClass('bt-actv');
+            $('.bt-1').removeClass('bt-actv');
+        })
+    },
     // Bind Event Listeners
     //
     // Bind any events that are required on startup. Common events are:
@@ -143,7 +162,10 @@ var app = {
     receivedEvent: function(id) {
         if(id === 'deviceready'){
             console.log('Received Event: ' + id);
-            app.loadForecast(app.drawCompass);
+            app.loadForecast(function (forecast) {
+                app.drawCompass(forecast);
+                app.jQueryInit(forecast);   
+            });
             app.compassInit();
         }else{
             console.log('device not loaded');
