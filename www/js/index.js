@@ -63,7 +63,7 @@ var app = {
         var watchID = navigator.compass.watchHeading(onSuccess, onError, pollFreq);        
     },
     drawCompass: function (forecast) {
-        forecast = forecast[0];
+        // forecast = forecast[0];
 
         var sWidth = $(window).width();
         var sHeight = $(window).height();
@@ -126,7 +126,24 @@ var app = {
         this.bindEvents();
     },
     jQueryInit: function(forecast) {
-        $('.zone').html(forecast[0].zone);
+        
+        var getTitle = function (str) {
+            str = str.toLowerCase();
+            if(str.indexOf('deep')){
+                console.log(str);
+            }
+
+        }
+
+        getTitle(forecast.forecast[0].title);
+
+        $('.zone').html(forecast.zone);
+        
+
+
+
+        $('.bt-1').html(forecast.forecast[0].title);
+        $('.bt-2').html(forecast.forecast[1].title);
 
         /* handlers */
         $(document).on('tap', '.bt-1', function () {
@@ -148,7 +165,7 @@ var app = {
     },
     loadForecast: function (callback) {
         $.get('http://avy-rose-server.herokuapp.com/', {}, function (forecast) {
-            callback(forecast);
+            callback(forecast = forecast[0]);
         });
     },
     // deviceready Event Handler
