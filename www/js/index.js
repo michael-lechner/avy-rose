@@ -129,21 +129,19 @@ var app = {
         
         var getTitle = function (str) {
             str = str.toLowerCase();
-            if(str.indexOf('deep')){
-                console.log(str);
+            if(str.indexOf('deep') === 0){
+                return 'Deep Slab';
+            }else if(str.indexOf('wind') === 0){
+                return 'Wind Slab';
+            }else if(str.indexOf('wet') === 0){
+                return 'Wet Slab';
             }
-
         }
-
-        getTitle(forecast.forecast[0].title);
 
         $('.zone').html(forecast.zone);
         
-
-
-
-        $('.bt-1').html(forecast.forecast[0].title);
-        $('.bt-2').html(forecast.forecast[1].title);
+        $('.bt-1').html(getTitle(forecast.forecast[0].title));
+        $('.bt-2').html(getTitle(forecast.forecast[1].title));
 
         /* handlers */
         $(document).on('tap', '.bt-1', function () {
