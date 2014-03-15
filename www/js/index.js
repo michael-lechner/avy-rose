@@ -46,18 +46,19 @@ var app = {
         
         function onError() {
             if(testing){
-                $('#heading').html('no compass');
+                $('#heading').html('err no compass');
             }
         };
 
         function onSuccess(heading) {
             if(testing){
                 var headingDisplay = $('#heading');
-                headingDisplay.html('Heading: ' + heading);
+                headingDisplay.html('Heading: ' + heading.magneticHeading);
+                console.log(heading.magneticHeading);
             }
 
             var el = $('svg');
-            el.css('-webkit-transform', 'rotate(' + heading + 'deg)');
+            el.css('-webkit-transform', 'rotate(' + heading.magneticHeading + 'deg)');
         };
 
         var watchID = navigator.compass.watchHeading(onSuccess, onError, pollFreq);        
@@ -115,7 +116,7 @@ var app = {
                     'Z'
                 ).attr({
                     fill: (avyRose[ind][vals[i]]) ? lvlColor[i] : '#fff',
-                    stroke: '#bdc3c7'
+                    stroke: '#000'//'#bdc3c7'
                 });
             }
             ind++;
