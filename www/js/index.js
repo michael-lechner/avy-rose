@@ -38,10 +38,11 @@ var dColor = {
 }
 
 var testing = false;
+var mainHeading = 0;
 /*************/
 var app = {
     compassInit: function () {
-        var pollFreq = { frequency: 300 };
+        var pollFreq = { frequency: 100 };
         
         function onError() {
             if(testing){
@@ -55,6 +56,8 @@ var app = {
                 headingDisplay.html('Heading: ' + heading.magneticHeading);
                 console.log(heading.magneticHeading);
             }
+
+            mainHeading = heading.magneticHeading;
 
             var el = $('svg');
             el.css('-webkit-transform', 'rotate(' + heading.magneticHeading + 'deg)');
@@ -103,6 +106,8 @@ var app = {
 
 
         paper.clear();
+        $('svg').css('-webkit-transform', 'rotate(' + mainHeading + 'deg)');
+
 
         paper.text(sWidth/2 - 15, 50, 'N').attr({
             'font-size': 30
@@ -163,7 +168,11 @@ var app = {
         $(document).on('tap', '.bt-2', function () {
             $('.bt-2').addClass('bt-actv');
             $('.bt-1').removeClass('bt-actv');
-            app.drawCompass(forecast, 1);
+            $('svg').fadeOut(500, function () {
+                $('svg').remove();
+                app.drawCompass(forecast, 1);
+                $('svg').fadeIn(500);
+            })
         });
     },
     // Bind Event Listeners
