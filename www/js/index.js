@@ -37,6 +37,14 @@ var dColor = {
     extreme: '#000000'
 }
 
+// var dangerDescrip{
+//     low: 'Generally safe avalanche conditions. Watch for unstable snow on isolated terrain features',
+//     moderate: 'Heightened avalanche conditions on specific terrain features. Evaluate snow and terrain carefully; identify features of concern',
+//     considerable: 'Dangerous avalanche conditions. Careful snowpack evaluation, cautious route-finding and conservative decision-making essential',
+//     high: 'Very dangerous avalanche conditions. Travel in avalanche terrain NOT recommended.',
+//     extreme: 'Avoid all avalanche terrain'
+// }
+
 var testing = false;
 var mainHeading = 0;
 /*************/
@@ -92,22 +100,14 @@ var app = {
             return {x:x, y:y};
         }
 
-        // for(var key in forecast.forecast[0]){
-        //     if(key !== 'title'){
-        //         avyRose[dir[key]] = new Slice(forecast.forecast[0][key].bt, forecast.forecast[0][key].at, forecast.forecast[0][key].tl)
-        //     }
-        // }    
-
         for(var key in forecast.forecast[forecastNum]){
             if(key !== 'title'){
                 avyRose[dir[key]] = new Slice(forecast.forecast[forecastNum][key].bt, forecast.forecast[forecastNum][key].at, forecast.forecast[forecastNum][key].tl)
             }
         }    
 
-
         paper.clear();
         $('svg').css('-webkit-transform', 'rotate(' + mainHeading + 'deg)');
-
 
         paper.text(sWidth/2 - 15, 50, 'N').attr({
             'font-size': 30
@@ -149,6 +149,8 @@ var app = {
             }
         }
 
+        $('.forecast-date').text('forecast date: ' + forecast.forecastDate);
+
         $('.zone').html(forecast.zone);
         
         $('.bt-1').html(getTitle(forecast.forecast[0].title));
@@ -174,6 +176,10 @@ var app = {
                 $('svg').fadeIn(500);
             })
         });
+
+        // $(document).on('tap', 'svg', function () {
+        //     $('.info-display').fadeIn(300);
+        // });
     },
     // Bind Event Listeners
     //
