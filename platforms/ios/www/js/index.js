@@ -37,13 +37,13 @@ var dColor = {
     extreme: '#000000'
 }
 
-// var dangerDescrip{
-//     low: 'Generally safe avalanche conditions. Watch for unstable snow on isolated terrain features',
-//     moderate: 'Heightened avalanche conditions on specific terrain features. Evaluate snow and terrain carefully; identify features of concern',
-//     considerable: 'Dangerous avalanche conditions. Careful snowpack evaluation, cautious route-finding and conservative decision-making essential',
-//     high: 'Very dangerous avalanche conditions. Travel in avalanche terrain NOT recommended.',
-//     extreme: 'Avoid all avalanche terrain'
-// }
+var dangerDescrip = {
+    low: 'Generally safe avalanche conditions. Watch for unstable snow on isolated terrain features',
+    moderate: 'Heightened avalanche conditions on specific terrain features. Evaluate snow and terrain carefully; identify features of concern',
+    considerable: 'Dangerous avalanche conditions. Careful snowpack evaluation, cautious route-finding and conservative decision-making essential',
+    high: 'Very dangerous avalanche conditions. Travel in avalanche terrain NOT recommended.',
+    extreme: 'Avoid all avalanche terrain'
+}
 
 var testing = false;
 var mainHeading = 0;
@@ -137,6 +137,8 @@ var app = {
         this.bindEvents();
     },
     jQueryInit: function(forecast) {
+
+        var windowHeight = $(window).height();
         
         var getTitle = function (str) {
             str = str.toLowerCase();
@@ -148,6 +150,17 @@ var app = {
                 return 'Wet Slab';
             }
         }
+        /* setup info window */
+        $('.info-display').css('margin-top', (windowHeight*0.1));
+
+        $('.info-heading-at').html('Above Treeline: ' + forecast.atRating);
+        $('.info-descrip-at').html(dangerDescrip[forecast.atRating]);
+
+        $('.info-heading-tl').html('Near Treeline: ' + forecast.tlRating);
+        $('.info-descrip-tl').html(dangerDescrip[forecast.tlRating]);
+
+        $('.info-heading-bt').html('Below Treeline: ' + forecast.btRating);
+        $('.info-descrip-bt').html(dangerDescrip[forecast.btRating]);
 
         $('.forecast-date').text('forecast date: ' + forecast.forecastDate);
 
@@ -177,9 +190,18 @@ var app = {
             })
         });
 
-        // $(document).on('tap', 'svg', function () {
-        //     $('.info-display').fadeIn(300);
-        // });
+        $(document).on('tap', 'svg', function () {
+            target = $('.info-display');
+            target.animate({height: (windowHeight*0.75)}, 800, function(){
+                $('.content').fadeIn(400);
+            });    
+        });
+
+        $(document).on('tap', '.info-display', function () {
+            target = $('.info-display');
+            $('.content').fadeOut(500);
+            target.animate({height: 0}, 1000);
+        });
     },
     // Bind Event Listeners
     //
