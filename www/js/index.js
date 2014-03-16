@@ -151,16 +151,16 @@ var app = {
             }
         }
         /* setup info window */
-        $('.info-display').css('margin-top', (windowHeight*0.1));
+        $('.info-display').css('margin-top', (windowHeight*0.07));
 
-        $('.info-heading-at').html('Above Treeline: ' + forecast.atRating);
-        $('.info-descrip-at').html(dangerDescrip[forecast.atRating]);
+        $('.info-heading, at').html('Above Treeline: ' + forecast.atRating);
+        $('.info-descrip, at').html(dangerDescrip[forecast.atRating]);
 
-        $('.info-heading-tl').html('Near Treeline: ' + forecast.tlRating);
-        $('.info-descrip-tl').html(dangerDescrip[forecast.tlRating]);
+        $('.info-heading, tl').html('Near Treeline: ' + forecast.tlRating);
+        $('.info-descrip, tl').html(dangerDescrip[forecast.tlRating]);
 
-        $('.info-heading-bt').html('Below Treeline: ' + forecast.btRating);
-        $('.info-descrip-bt').html(dangerDescrip[forecast.btRating]);
+        $('.info-heading, bt').html('Below Treeline: ' + forecast.btRating);
+        $('.info-descrip, bt').html(dangerDescrip[forecast.btRating]);
 
         $('.forecast-date').text('forecast date: ' + forecast.forecastDate);
 
@@ -192,7 +192,7 @@ var app = {
 
         $(document).on('tap', 'svg', function () {
             target = $('.info-display');
-            target.animate({height: (windowHeight*0.75)}, 800, function(){
+            target.animate({height: (windowHeight*0.8)}, 800, function(){
                 $('.content').fadeIn(400);
             });    
         });

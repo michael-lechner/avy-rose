@@ -121,6 +121,11 @@ h1 {
 
 .content{
     display: none;
+    padding: 15px;
+}
+
+.info-descrip{
+    padding: 0px 15px
 }
 
 .header{
