@@ -38,11 +38,10 @@ var dColor = {
 }
 
 var testing = false;
-
 /*************/
 var app = {
     compassInit: function () {
-        var pollFreq = { frequency: 100 };
+        var pollFreq = { frequency: 300 };
         
         function onError() {
             if(testing){
@@ -63,8 +62,7 @@ var app = {
 
         var watchID = navigator.compass.watchHeading(onSuccess, onError, pollFreq);        
     },
-    drawCompass: function (forecast) {
-        // forecast = forecast[0];
+    drawCompass: function (forecast, forecastNum) {
 
         var sWidth = $(window).width();
         var sHeight = $(window).height();
@@ -91,11 +89,18 @@ var app = {
             return {x:x, y:y};
         }
 
-        for(var key in forecast.forecast[0]){
+        // for(var key in forecast.forecast[0]){
+        //     if(key !== 'title'){
+        //         avyRose[dir[key]] = new Slice(forecast.forecast[0][key].bt, forecast.forecast[0][key].at, forecast.forecast[0][key].tl)
+        //     }
+        // }    
+
+        for(var key in forecast.forecast[forecastNum]){
             if(key !== 'title'){
-                avyRose[dir[key]] = new Slice(forecast.forecast[0][key].bt, forecast.forecast[0][key].at, forecast.forecast[0][key].tl)
+                avyRose[dir[key]] = new Slice(forecast.forecast[forecastNum][key].bt, forecast.forecast[forecastNum][key].at, forecast.forecast[forecastNum][key].tl)
             }
         }    
+
 
         paper.clear();
 
@@ -148,12 +153,18 @@ var app = {
         $(document).on('tap', '.bt-1', function () {
             $('.bt-1').addClass('bt-actv');
             $('.bt-2').removeClass('bt-actv');
-        })
+            $('svg').fadeOut(500, function () {
+                $('svg').remove();
+                app.drawCompass(forecast, 0);
+                $('svg').fadeIn(500);
+            });
+        });
 
         $(document).on('tap', '.bt-2', function () {
             $('.bt-2').addClass('bt-actv');
             $('.bt-1').removeClass('bt-actv');
-        })
+            app.drawCompass(forecast, 1);
+        });
     },
     // Bind Event Listeners
     //
@@ -179,7 +190,7 @@ var app = {
         if(id === 'deviceready'){
             console.log('Received Event: ' + id);
             app.loadForecast(function (forecast) {
-                app.drawCompass(forecast);
+                app.drawCompass(forecast, 0);
                 app.jQueryInit(forecast);   
             });
             app.compassInit();

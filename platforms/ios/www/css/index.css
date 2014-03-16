@@ -24,8 +24,8 @@ body {
     -webkit-touch-callout: none;                /* prevent callout to copy image, etc when tap to hold */
     -webkit-text-size-adjust: none;             /* prevent webkit from resizing text to fit */
     -webkit-user-select: none;                  /* prevent copy paste, to allow, change 'none' to 'text' */
-    /*background-color:#E4E4E4;*/
-    background-color: #fff;
+    background-color:#E4E4E4;
+    /*background-color: #fff;*/
     /*background-image:linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
     background-image:-webkit-linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
     background-image:-ms-linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
@@ -111,9 +111,13 @@ h1 {
 }
 
 .header{
+    margin-top: 6%;
     color: #fff;
     background-color: #000;
-    padding: 10px;
+    padding: 20px 10px;
+    text-align: center;
+    font-family: 'Lobster', cursive;
+    font-size: 30px;
 }
 
 .bt-1, .bt-2{
@@ -134,7 +138,7 @@ h1 {
 
 .zone{
     text-align: center;
-    margin: 40px auto;
+    margin: 10px auto;
     color: rgba(52, 152, 219,1.0);
     font-size: 30px
 }
@@ -150,7 +154,13 @@ svg{
      -webkit-transition: -webkit-transform 0.1s linear;
 }
 
-
+.footer{
+    position: fixed;
+    bottom: 0px;
+    padding: 20px;
+    background-color: #000;
+    width: 100%;
+}
 
 
 
