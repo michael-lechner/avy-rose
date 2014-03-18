@@ -37,6 +37,14 @@ var dColor = {
     extreme: '#000000'
 }
 
+var dIndex = {
+    low: 1,
+    moderate: 2,
+    considerable: 3,
+    high: 4,
+    extreme: 4
+}
+
 var dangerDescrip = {
     low: 'Generally safe avalanche conditions. Watch for unstable snow on isolated terrain features',
     moderate: 'Heightened avalanche conditions on specific terrain features. Evaluate snow and terrain carefully; identify features of concern',
@@ -46,6 +54,7 @@ var dangerDescrip = {
 }
 
 var testing = false;
+var prevHeading = 0;
 var mainHeading = 0;
 /*************/
 var app = {
@@ -67,8 +76,16 @@ var app = {
 
             mainHeading = heading.magneticHeading;
 
+            // if(prevHeading + mainHeading > 365 && mainHeading < 180 && prevHeading > 180){
+            //     mainHeading += prevHeading;
+            // }
+
+            console.log(mainHeading);
+
             var el = $('svg');
-            el.css('-webkit-transform', 'rotate(' + heading.magneticHeading + 'deg)');
+            // el.css('-webkit-transform', 'rotate(' + mainHeading + 'deg)');
+            TweenMax.to(el, 0.2, {rotationZ: mainHeading + 'short'});
+            prevHeading = mainHeading;
         };
 
         var watchID = navigator.compass.watchHeading(onSuccess, onError, pollFreq);        
@@ -153,16 +170,19 @@ var app = {
         /* setup info window */
         $('.info-display').css('margin-top', (windowHeight*0.07));
 
-        $('.info-heading, at').html('Above Treeline: ' + forecast.atRating);
-        $('.info-descrip, at').html(dangerDescrip[forecast.atRating]);
+        $('.info-heading.at').html('Above Treeline: ' + forecast.atRating);
+        $('.info-descrip.at').html(dangerDescrip[forecast.atRating]);
+        $('.info-img.at').attr('src', './img/' + dIndex[forecast.atRating] + '.png')
 
-        $('.info-heading, tl').html('Near Treeline: ' + forecast.tlRating);
-        $('.info-descrip, tl').html(dangerDescrip[forecast.tlRating]);
+        $('.info-heading.tl').html('Near Treeline: ' + forecast.tlRating);
+        $('.info-descrip.tl').html(dangerDescrip[forecast.tlRating]);
+        $('.info-img.tl').attr('src', './img/' + dIndex[forecast.tlRating] + '.png')
 
-        $('.info-heading, bt').html('Below Treeline: ' + forecast.btRating);
-        $('.info-descrip, bt').html(dangerDescrip[forecast.btRating]);
+        $('.info-heading.bt').html('Below Treeline: ' + forecast.btRating);
+        $('.info-descrip.bt').html(dangerDescrip[forecast.btRating]);
+        $('.info-img.bt').attr('src', './img/' + dIndex[forecast.btRating] + '.png')
 
-        $('.forecast-date').text('forecast date: ' + forecast.forecastDate);
+        $('.forecast-date').text('forecasted: ' + forecast.forecastDate);
 
         $('.zone').html(forecast.zone);
         
