@@ -74,21 +74,28 @@ var app = {
                 console.log(heading.magneticHeading);
             }
 
-            mainHeading = heading.magneticHeading;
-
-            // if(prevHeading + mainHeading > 365 && mainHeading < 180 && prevHeading > 180){
-            //     mainHeading += prevHeading;
-            // }
-
-            console.log(mainHeading);
+            mainHeading = (360 - heading.magneticHeading);
 
             var el = $('svg');
-            // el.css('-webkit-transform', 'rotate(' + mainHeading + 'deg)');
             TweenMax.to(el, 0.2, {rotationZ: mainHeading + 'short'});
-            prevHeading = mainHeading;
         };
 
         var watchID = navigator.compass.watchHeading(onSuccess, onError, pollFreq);        
+    },
+    checkConnection: function () {
+            var networkState = navigator.connection.type;
+
+            var states = {};
+            states[Connection.UNKNOWN]  = true
+            states[Connection.ETHERNET] = true
+            states[Connection.WIFI]     = true
+            states[Connection.CELL_2G]  = true
+            states[Connection.CELL_3G]  = true
+            states[Connection.CELL_4G]  = true
+            states[Connection.CELL]     = true
+            states[Connection.NONE]     = false;
+
+            return states[networkState];
     },
     drawCompass: function (forecast, forecastNum) {
 
@@ -103,6 +110,7 @@ var app = {
         var pollFreq = { frequency: 100 };
         var avyRose = [];
         var vals = ['at', 'tl', 'bt'];
+
         var lvlColor = [dColor[forecast.atRating], dColor[forecast.tlRating], dColor[forecast.btRating]];
 
         var Slice = function (bt, at, tl) {
@@ -130,7 +138,6 @@ var app = {
             'font-size': 30
         });
 
-
         var ind = 0;
         for(var ang = Math.PI / 8; ang < ((Math.PI / 8) + Math.PI * 2) - subAng; ang += subAng){
             for(var i = radius.length - 1; i >= 0; i--){
@@ -156,6 +163,7 @@ var app = {
     jQueryInit: function(forecast) {
 
         var windowHeight = $(window).height();
+        var windowWidth = $(window).width();
         
         var getTitle = function (str) {
             str = str.toLowerCase();
@@ -167,9 +175,22 @@ var app = {
                 return 'Wet Slab';
             }
         }
-        /* setup info window */
-        $('.info-display').css('margin-top', (windowHeight*0.07));
 
+        /* prevents elastic scrolling */
+        $(document).on('touchmove', function(e) {
+            e.preventDefault();
+        });
+
+        /* setup descrip window */
+        $('.descrip-display').css('height', windowHeight);
+        $('.descrip-display').css('margin-left', windowWidth);
+
+        $('.descrip-zone').text('Discussion: ' + forecast.zone);
+        $('.descrip-text').html(forecast.description);
+        /*********************/
+
+
+        /* setup info window */
         $('.info-heading.at').html('Above Treeline: ' + forecast.atRating);
         $('.info-descrip.at').html(dangerDescrip[forecast.atRating]);
         $('.info-img.at').attr('src', './img/' + dIndex[forecast.atRating] + '.png')
@@ -181,6 +202,8 @@ var app = {
         $('.info-heading.bt').html('Below Treeline: ' + forecast.btRating);
         $('.info-descrip.bt').html(dangerDescrip[forecast.btRating]);
         $('.info-img.bt').attr('src', './img/' + dIndex[forecast.btRating] + '.png')
+        /*********************/
+
 
         $('.forecast-date').text('forecasted: ' + forecast.forecastDate);
 
@@ -190,36 +213,50 @@ var app = {
         $('.bt-2').html(getTitle(forecast.forecast[1].title));
 
         /* handlers */
+        $(document).on('tap', '.zone', function () {
+            var el = $('.descrip-display');
+            el.animate({'margin-left': 0}, 800, function () {
+                $('.descrip-display .content').fadeIn(400);
+            }); 
+        });
+
+        $(document).on('tap', '.descrip-display', function () {
+            var el = $('.descrip-display');
+            el.animate({'margin-left': windowWidth}, 800, function () {
+                $('.descrip-display .content').fadeOut(400);
+            }); 
+        });
+
         $(document).on('tap', '.bt-1', function () {
+            var el = $('svg');
             $('.bt-1').addClass('bt-actv');
             $('.bt-2').removeClass('bt-actv');
-            $('svg').fadeOut(500, function () {
-                $('svg').remove();
+            el.fadeOut(500, function () {
+                el.remove();
                 app.drawCompass(forecast, 0);
-                $('svg').fadeIn(500);
             });
         });
 
         $(document).on('tap', '.bt-2', function () {
+            var el = $('svg');
             $('.bt-2').addClass('bt-actv');
             $('.bt-1').removeClass('bt-actv');
-            $('svg').fadeOut(500, function () {
-                $('svg').remove();
+            el.fadeOut(500, function () {
+                el.remove();
                 app.drawCompass(forecast, 1);
-                $('svg').fadeIn(500);
-            })
+            });
         });
 
         $(document).on('tap', 'svg', function () {
             target = $('.info-display');
-            target.animate({height: (windowHeight*0.8)}, 800, function(){
-                $('.content').fadeIn(400);
+            target.animate({height: (windowHeight*0.89)}, 800, function(){
+                $('.info-display .content').fadeIn(400);
             });    
         });
 
         $(document).on('tap', '.info-display', function () {
             target = $('.info-display');
-            $('.content').fadeOut(500);
+            $('.info-display .content').fadeOut(500);
             target.animate({height: 0}, 1000);
         });
     },
@@ -231,9 +268,19 @@ var app = {
         document.addEventListener('deviceready', this.onDeviceReady, false);
     },
     loadForecast: function (callback) {
-        $.get('http://avy-rose-server.herokuapp.com/', {}, function (forecast) {
-            callback(forecast = forecast[0]);
-        });
+        if(app.checkConnection()){
+            $.get('http://avy-rose-server.herokuapp.com/', {}, function (forecast) {
+                forecast = forecast[0];
+                app.saveForecast(forecast);
+                callback(forecast);
+            });
+        }else{
+            var forecast = JSON.parse(window.localStorage.getItem('forecast'));
+            callback(forecast);                
+        }
+    },
+    saveForecast: function (forecast) {
+        window.localStorage.setItem('forecast', JSON.stringify(forecast));
     },
     // deviceready Event Handler
     //
@@ -247,6 +294,7 @@ var app = {
         if(id === 'deviceready'){
             console.log('Received Event: ' + id);
             app.loadForecast(function (forecast) {
+                console.log(forecast);
                 app.drawCompass(forecast, 0);
                 app.jQueryInit(forecast);   
             });

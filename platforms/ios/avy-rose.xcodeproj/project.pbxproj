@@ -5,7 +5,6 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		1D3623260D0F684500981E51 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* AppDelegate.m */; };
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
@@ -42,6 +41,9 @@
 		B182AFE0AC884FF49325B225 /* CDVCompass.m in Sources */ = {isa = PBXBuildFile; fileRef = CAEFCA30B0F14CA684CA4AEA /* CDVCompass.m */; };
 		D4A0D8761607E02300AEF8BB /* Default-568h@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = D4A0D8751607E02300AEF8BB /* Default-568h@2x~iphone.png */; };
 		F840E1F1165FE0F500CFE078 /* config.xml in Resources */ = {isa = PBXBuildFile; fileRef = F840E1F0165FE0F500CFE078 /* config.xml */; };
+		2DD180FF792241B19F56AC8B /* CDVConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = B9F116C0F4E445D28E284826 /* CDVConnection.m */; };
+		89836257719A4241BEA64494 /* CDVReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = E468B34B8B8E48D89DCC57A7 /* CDVReachability.m */; };
+		853777FC490D4C1FBB2E9D43 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D71ADB1560AC41D8B6527D12 /* SystemConfiguration.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -107,6 +109,11 @@
 		D4A0D8751607E02300AEF8BB /* Default-568h@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x~iphone.png"; sourceTree = "<group>"; };
 		DCF524866A8845D780F9DC1A /* CDVLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CDVLogger.m; path = org.apache.cordova.console/CDVLogger.m; sourceTree = "<group>"; };
 		F840E1F0165FE0F500CFE078 /* config.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = config.xml; path = "avy-rose/config.xml"; sourceTree = "<group>"; };
+		B9F116C0F4E445D28E284826 /* CDVConnection.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "CDVConnection.m"; path = "org.apache.cordova.network-information/CDVConnection.m"; sourceTree = "<group>"; fileEncoding = 4; };
+		E468B34B8B8E48D89DCC57A7 /* CDVReachability.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "CDVReachability.m"; path = "org.apache.cordova.network-information/CDVReachability.m"; sourceTree = "<group>"; fileEncoding = 4; };
+		1311C5EE3F0145CE9799EA0A /* CDVConnection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CDVConnection.h"; path = "org.apache.cordova.network-information/CDVConnection.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		565974DAE54245F49E3C3271 /* CDVReachability.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CDVReachability.h"; path = "org.apache.cordova.network-information/CDVReachability.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		D71ADB1560AC41D8B6527D12 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "SystemConfiguration.framework"; path = "System/Library/Frameworks/SystemConfiguration.framework"; sourceTree = SDKROOT; fileEncoding = 4; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +126,7 @@
 				288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */,
 				305D5FD1115AB8F900A74A75 /* MobileCoreServices.framework in Frameworks */,
 				5AEE5B35173C68D80009041E /* CoreLocation.framework in Frameworks */,
+				853777FC490D4C1FBB2E9D43 /* SystemConfiguration.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -210,6 +218,7 @@
 				5B1594DC16A7569C00FEF299 /* AssetsLibrary.framework */,
 				288765FC0DF74451002DB57D /* CoreGraphics.framework */,
 				305D5FD0115AB8F900A74A75 /* MobileCoreServices.framework */,
+				D71ADB1560AC41D8B6527D12 /* SystemConfiguration.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -229,6 +238,10 @@
 				91DC9AAD061348EEB30D17AC /* CDVLogger.h */,
 				CAEFCA30B0F14CA684CA4AEA /* CDVCompass.m */,
 				A318FFE75BC54646AB34421C /* CDVCompass.h */,
+				B9F116C0F4E445D28E284826 /* CDVConnection.m */,
+				E468B34B8B8E48D89DCC57A7 /* CDVReachability.m */,
+				1311C5EE3F0145CE9799EA0A /* CDVConnection.h */,
+				565974DAE54245F49E3C3271 /* CDVReachability.h */,
 			);
 			name = Plugins;
 			path = "avy-rose/Plugins";
@@ -421,6 +434,8 @@
 				302D95F114D2391D003F00A1 /* MainViewController.m in Sources */,
 				655D6B52463145AA973EF577 /* CDVLogger.m in Sources */,
 				B182AFE0AC884FF49325B225 /* CDVCompass.m in Sources */,
+				2DD180FF792241B19F56AC8B /* CDVConnection.m in Sources */,
+				89836257719A4241BEA64494 /* CDVReachability.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

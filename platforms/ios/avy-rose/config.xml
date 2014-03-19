@@ -27,6 +27,9 @@
     <feature name="Compass">
         <param name="ios-package" value="CDVCompass" />
     </feature>
+    <feature name="NetworkStatus">
+        <param name="ios-package" value="CDVConnection" />
+    </feature>
     <name>avy-rose</name>
     <description>
         Hello World sample application that responds to the deviceready event.
