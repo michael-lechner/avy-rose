@@ -294,7 +294,6 @@ var app = {
         if(id === 'deviceready'){
             console.log('Received Event: ' + id);
             app.loadForecast(function (forecast) {
-                console.log(forecast);
                 app.drawCompass(forecast, 0);
                 app.jQueryInit(forecast);   
             });
